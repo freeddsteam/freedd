@@ -33,7 +33,7 @@
               <i class="el-icon-menu"></i>
               <span>商城管理</span>
             </template>
-            <el-menu-item index="3-1">商品分类</el-menu-item>
+            <el-menu-item index="/cate">商品分类</el-menu-item>
             <el-menu-item index="3-2">商品规格</el-menu-item>
             <el-menu-item index="3-3">商品管理</el-menu-item>
             <el-menu-item index="3-4">会员管理</el-menu-item>

@@ -158,3 +158,21 @@ export let reqManageDetail=(user)=>{
         params:user
     })
 }
+
+// 修改
+
+export let reqManageUpdate=(user)=>{
+    return axios({
+        url:baseUrl+"/api/useredit",
+        method:"post",
+        data:user
+    })
+}
+
+//获取总数
+
+export let reqManageCount=()=>{
+    return axios({
+        url:baseUrl+"/api/usercount"
+    })
+}
