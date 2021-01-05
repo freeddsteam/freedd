@@ -6,16 +6,11 @@
     border
     :tree-props="{ children: 'children' }"
   >
-    <el-table-column prop="id" label="分类编号" width="180"> </el-table-column>
-    <el-table-column prop="catename" label="分类名称" width="180">
-    </el-table-column>
-    <el-table-column label="图片">
+    <el-table-column prop="id" label="规格编号" width="180"> </el-table-column>
+    <el-table-column prop="specsname" label="规格名称"> </el-table-column>
+    <el-table-column prop="attrs" label="规格属性">
       <template slot-scope="scope">
-        <img
-          v-if="scope.row.img !== 'null'"
-          :src="$pre + scope.row.img"
-          alt=""
-        />
+        <el-tag size="small" closable v-for="item in scope.row.attrs" :key="item.index">{{item}}</el-tag>
       </template>
     </el-table-column>
     <el-table-column prop="status" label="状态">
@@ -35,36 +30,33 @@
 
 <script>
 import { successalert } from "../../../utils/alert";
-import { reqCateDel, reqManageDel } from "../../../utils/http";
+import {reqspecsDel } from "../../../utils/http";
 import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["info"],
   computed: {
     ...mapGetters({
-      list: "cate/list",
+      list: "specs/list",
     }),
   },
 
   data() {
-    return {
-     
-    };
+    return {};
   },
   methods: {
     ...mapActions({
-      reqList: "cate/reqList",
+      reqList: "specs/reqList",
     }),
-    del(id){
-      reqCateDel({id:id}).then(res=>{
-        if(res.data.code==200){
-          
-          successalert(res.data.msg)
-          this.reqList()
+    del(id) {
+      reqspecsDel({ id: id }).then((res) => {
+        if (res.data.code == 200) {
+          successalert(res.data.msg);
+          this.reqList();
         }
-      })
+      });
     },
     edit(id) {
-     this.$emit("edit", id);
+      this.$emit("edit", id);
     },
   },
   mounted() {

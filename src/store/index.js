@@ -1,14 +1,21 @@
 import Vue from "vue"
 import Vuex from "vuex"
 
+
+
+ import {actions} from "./actions"
+ import {state,getters,mutations} from "./mutations"
+import cate from "./modules/cate"
+import specs from "./modules/specs"
 Vue.use(Vuex)
-
-import {actions} from "./actions"
-import {state,getters,mutations} from "./mutations"
-
-export default new Vuex.store({
+export default new Vuex.Store({
     state,
     getters,
     mutations,
-    actions
+    actions,
+    modules:{
+        cate,
+        specs
+    }
+    
 })

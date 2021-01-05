@@ -176,3 +176,130 @@ export let reqManageCount=()=>{
         url:baseUrl+"/api/usercount"
     })
 }
+
+//`````````````````````````商品分类················`````````
+
+function dataToFormData(user){
+    let data=new FormData()
+    for(let i in user){
+        data.append(i,user[i])
+    }
+    return data
+}
+
+export let reqCateAdd=(user)=>{
+    return axios({
+        url:baseUrl+"/api/cateadd",
+        method:"post",
+        data:dataToFormData(user)
+    })
+}
+
+export let reqCateList=(user)=>{
+    return axios({
+        url:baseUrl+"/api/catelist",
+        method:"get",
+        params:user
+    })
+}
+//详情
+export let reqCateDetail=(user)=>{
+    return axios({
+        url:baseUrl+"/api/cateinfo",
+        method:"get",
+        params:user
+    })
+}
+//修改
+export let reqCateUpdate=(user)=>{
+    return axios({
+        url:baseUrl+"/api/cateedit",
+        method:"post",
+        data:dataToFormData(user)
+    })
+}
+//删除
+export let reqCateDel=(user)=>{
+    return axios({
+        url:baseUrl+"/api/catedelete",
+        method:"post",
+        data:user
+    })
+}
+
+//````````````````````商品规格管理1····················
+//添加
+export let reqspecsAdd=(user)=>{
+    return axios({
+        url:baseUrl+"/api/specsadd",
+        method:"post",
+        data:user
+    })
+}
+// 列表
+export let reqspecsList=(user)=>{
+    return axios({
+        url:baseUrl+"/api/specslist",
+        method:"get",
+        params:user
+    })
+}
+//详情
+export let reqspecsDetail = (user) => {
+    return axios({
+        url: baseUrl + "/api/specsinfo",
+        method: "get",
+        params: user
+    })
+}
+
+//修改 user={id:"必填",img:file,specsname:""}
+export let reqspecsUpdate = (user) => {
+    return axios({
+        url: baseUrl + "/api/specsedit",
+        method: "post",
+        data: user
+    })
+}
+
+//删除 user={id:1}
+export let reqspecsDel = (user) => {
+    return axios({
+        url: baseUrl + "/api/specsdelete",
+        method: "post",
+        data:user
+    })
+}
+
+//总数
+export let reqspecsCount=()=>{
+    return axios({
+        url:baseUrl+"/api/specscount"
+    })
+}
+//`````````````````````会员管理`````````````````````
+//列表
+export let reqmemberList=()=>{
+    return axios({
+        url:baseUrl+"/api/memberlist",
+        method:"get",
+        
+
+    })
+}
+//详情
+export let reqmemberDetail=(uid)=>{
+    return axios({
+        url:baseUrl+"/api/memberinfo",
+        method:"get",
+        params:uid
+    })
+}
+//修改
+export let reqmemberUpdate=(user)=>{
+    return axios({
+        url:baseUrl+"/api/memberedit",
+        method:"post",
+        data:user
+    })
+}

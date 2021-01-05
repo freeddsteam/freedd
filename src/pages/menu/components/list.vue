@@ -66,7 +66,7 @@ export default {
         .then(()=>{
           
           reqMenuDel({id:id}).then(res=>{
-            console.log(111)
+            
             if(res.data.code==200){
               successalert(res.data.msg)
               this.$emit("init")

@@ -6,36 +6,33 @@
     >
       {{ user }}
       <el-form :model="user" label-width="80px">
-        <el-form-item label="上级分类">
-          <el-select v-model="user.pid">
-            <el-option label="--请选择--" value="" disabled></el-option>
-            <el-option label="顶级菜单" :value="0"></el-option>
-            <el-option v-for="item in list" :key="item.id" :value="item.id" :label="item.catename"></el-option>
-          </el-select>
+        <el-form-item label="规格名称">
+          <el-input v-model="user.specsname"></el-input>
         </el-form-item>
-        <el-form-item label="分类名称">
-          <el-input v-model="user.catename" placeholder="请输入内容"></el-input>
+        <el-form-item
+          label="规格属性"
+          v-for="(item, index) in attrsArr"
+          :key="index"
+        >
+          <div class="line">
+            <el-input class="line-ipt" v-model="item.value"></el-input>
+            <el-button
+              type="primary"
+              class="line-btn"
+              v-if="index == 0"
+              @click="addAttr"
+              >新增规格属性</el-button
+            >
+            <el-button
+              type="danger"
+              class="line-btn"
+              v-else
+              @click="delAttr(index)"
+              >删除</el-button
+            >
+          </div>
         </el-form-item>
-       <el-form-item label="图片" label-width="100px" v-if="user.pid!==0">
-          <!-- 一、原生js的上传文件 -->
-          <!-- <div class="my-upload">
-            <div class="add">+</div>
-            <img v-if="imgUrl" class="img" :src="imgUrl" alt />
-            <input v-if="info.isshow" type="file" class="ipt" @change="changeImg" />
-          </div>-->
 
-          <!-- 二、element-ui上传文件 -->
-
-          <el-upload
-            class="avatar-uploader"
-            action="#"
-            :show-file-list="false"
-            :on-change="changeImg2"
-          >
-            <img v-if="imgUrl" :src="imgUrl" class="avatar" />
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-form-item>
         <el-form-item label="状态">
           <el-switch
             v-model="user.status"
@@ -59,47 +56,41 @@
 <script>
 import { successalert } from "../../../utils/alert";
 import {
-  reqCateAdd,
-  reqCateDetail,
-  reqCateUpdate,
-  
+  reqspecsAdd,
+  reqspecsDetail,
+  reqspecsUpdate,
 } from "../../../utils/http";
-import {mapActions,mapGetters} from "vuex"
+import { mapActions, mapGetters } from "vuex";
 export default {
   props: ["info"],
-  computed:{
+  computed: {
     ...mapGetters({
-      list:"cate/list"
-    })
+      list: "cate/list",
+    }),
   },
   data() {
     return {
-      imgUrl:"",
+      imgUrl: "",
       value: true,
       user: {
-        pid: "",
-        catename: "",
-        img: null,
+        specsname: "",
+        attrs: [],
         status: 1,
       },
-      
+      attrsArr: [{ value: "" }],
     };
   },
-  mounted() {
-    
-    
-    
-  },
+  mounted() {},
   methods: {
     ...mapActions({
-      reqList:"cate/reqList"
+      reqList: "specs/reqList",
     }),
-    changeImg2(e){
-      let file=e.raw
-      this.imgUrl=URL.createObjectURL(file)
-      this.user.img=file
+    changeImg2(e) {
+      let file = e.raw;
+      this.imgUrl = URL.createObjectURL(file);
+      this.user.img = file;
     },
-    
+
     cancel() {
       if (!this.info.isadd) {
         this.empty();
@@ -107,16 +98,16 @@ export default {
       this.info.isshow = false;
     },
     empty() {
-      this.imgUrl="";
       this.user = {
-        pid: "",
-        catename: "",
-        img:null,
+        specsname: "",
+        attrs: "[]",
         status: 1,
       };
+      this.attrsArr = [{ value: "" }];
     },
     add() {
-      reqCateAdd(this.user).then((res) => {
+      this.user.attrs = JSON.stringify(this.attrsArr.map((item) => item.value));
+      reqspecsAdd(this.user).then((res) => {
         if (res.data.code == 200) {
           successalert(res.data.msg);
           this.cancel();
@@ -126,18 +117,17 @@ export default {
       });
     },
     getOne(id) {
-      reqCateDetail({ id: id }).then((res) => {
+      reqspecsDetail({ id: id }).then((res) => {
         if (res.data.code == 200) {
-          this.user = res.data.list;
-          this.user.id = id;
-          this.imgUrl=this.$pre+this.user.img
+          this.user = res.data.list[0];
+          this.user.attrs = JSON.parse(this.user.attrs);
+          this.attrsArr = this.user.attrs.map((item) => ({ value: item }));
         }
       });
     },
     update() {
-     
-      reqCateUpdate(this.user).then((res) => {
-        
+      this.user.attrs = JSON.stringify(this.attrsArr.map((item) => item.value));
+      reqspecsUpdate(this.user).then((res) => {
         if (res.data.code == 200) {
           successalert(res.data.msg);
           this.cancel();
@@ -145,6 +135,12 @@ export default {
           this.reqList();
         }
       });
+    },
+    addAttr() {
+      this.attrsArr.push({ value: "" });
+    },
+    delAttr(index) {
+      this.attrsArr.splice(index, 1);
     },
   },
 };
@@ -158,9 +154,11 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #409eff;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -169,9 +167,22 @@ export default {
   line-height: 178px;
   text-align: center;
 }
+
 .avatar {
   width: 178px;
   height: 178px;
   display: block;
+}
+
+.line {
+  display: flex;
+}
+
+.line-btn {
+  width: auto;
+}
+
+.line-ipt {
+  flex: 1;
 }
 </style>

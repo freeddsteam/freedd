@@ -34,9 +34,9 @@
               <span>商城管理</span>
             </template>
             <el-menu-item index="/cate">商品分类</el-menu-item>
-            <el-menu-item index="3-2">商品规格</el-menu-item>
+            <el-menu-item index="/specs">商品规格</el-menu-item>
             <el-menu-item index="3-3">商品管理</el-menu-item>
-            <el-menu-item index="3-4">会员管理</el-menu-item>
+            <el-menu-item index="/member">会员管理</el-menu-item>
             <el-menu-item index="3-5">轮播图管理</el-menu-item>
             <el-menu-item index="3-6">秒杀活动</el-menu-item>
           </el-submenu>
